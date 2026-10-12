@@ -143,9 +143,10 @@ const synth=('speechSynthesis' in window)?window.speechSynthesis:null;let voice=
 const GB_MALE=/Google UK English Male|Daniel|Arthur|Oliver|Ryan|George|Thomas|Alfie|Elliot|Noah|Ethan|male/i,GB_FEMALE=/female|Libby|Sonia|Maisie|Hazel|Susan|Kate|Serena|Stephanie|Martha|Fiona|Moira/i;
 function vscore(v){const gb=/en[-_]GB/i.test(v.lang);if(/Google UK English Male/i.test(v.name))return 100;if(gb&&GB_MALE.test(v.name)&&!GB_FEMALE.test(v.name))return 80;if(gb&&!GB_FEMALE.test(v.name))return 50;if(gb)return 30;if(/^en/i.test(v.lang))return 10;return 0}
 function loadVoices(){if(!synth)return;const vs=synth.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vscore(b)-vscore(a));voice=vs[0]||null}
-if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
-let si=0,el=0,playing=false,ended=false,narr=!!synth,done=true,utt=null,last=performance.now(),tick=()=>{};
-function speak(){if(!synth){done=true;return}synth.cancel();if(!narr||!playing){done=true;return}
+if(synth){loadVoices();synth.onvoiceschanged=()=>{loadVoices();if(voice&&wv){wv=false;if(playing&&narr)speak()}}}
+let wv=false,wt=false,si=0,el=0,playing=false,ended=false,narr=!!synth,done=true,utt=null,last=performance.now(),tick=()=>{};
+function speak(){if(!synth){done=true;return}if(!voice)loadVoices();synth.cancel();if(!narr||!playing){done=true;return}
+if(!voice&&!wt){wv=true;wt=true;done=false;setTimeout(()=>{if(wv){wv=false;if(playing&&narr)speak()}},2000);return}
 const u=new SpeechSynthesisUtterance(S[si].n.replace(/3D/g,'3-D'));if(voice){u.voice=voice;u.lang=voice.lang}u.rate=.95;u.pitch=1;done=false;u.onend=u.onerror=()=>{if(utt===u)done=true};utt=u;synth.speak(u)}
 const dots=document.getElementById('dots'),bar=document.getElementById('bar'),db=[];
 S.forEach((s,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Go to scene '+(i+1));b.style.cssText='width:10px;height:10px;min-width:0;min-height:0;padding:0;border-radius:50%;border:none;cursor:pointer';b.onclick=()=>{ended=false;load(i);ui()};dots.appendChild(b);db.push(b)});
