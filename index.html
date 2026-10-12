@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Huang Complex Seed Fund: narrated overview</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<style>
+:root{--text-primary:#1f1e1d;--text-secondary:#5f5e5a;--text-muted:#888780;--border:rgba(31,30,29,.15);--border-strong:rgba(31,30,29,.3);--surface-1:#f5f4ef;--surface-2:#ffffff;--bg:#faf9f5}
+@media (prefers-color-scheme:dark){:root{--text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;--border:rgba(241,239,232,.15);--border-strong:rgba(241,239,232,.3);--surface-1:#2c2c2a;--surface-2:#262624;--bg:#1f1e1d}}
+body{margin:0;background:var(--bg);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:2rem auto;padding:0 1.25rem}
+svg text{font-family:inherit}
+.t{font-size:14px;fill:var(--text-primary)}.ts{font-size:12px;fill:var(--text-secondary)}.th{font-size:14px;font-weight:500;fill:var(--text-primary)}
+.box{fill:var(--surface-1);stroke:var(--border-strong)}
+.arr{stroke:var(--text-secondary);stroke-width:1.5;fill:none}
+button,select{font:inherit;font-size:14px;color:var(--text-primary);background:transparent;border:.5px solid var(--border-strong);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--surface-1)}
+select{background:var(--surface-2);padding:6px 8px}
+</style>
+</head>
+<body>
+<main>
+<h1 style="font-size:20px;font-weight:500;margin:0 0 4px">Huang Complex Supercomputing Seed Fund</h1>
+<p style="margin:0 0 1rem;color:var(--text-secondary);font-size:14px">Mapping milk peptides to gut receptors · narrated overview</p>
+<div id="capk" style="font-size:12px;color:var(--text-secondary)">Scene 1 of 6</div>
+<div id="capt" style="font-size:16px;font-weight:500;margin-top:2px"></div>
+<div id="caps" aria-live="polite" style="font-size:14px;color:var(--text-secondary);margin-top:2px;min-height:44px;line-height:1.5"></div>
+<svg width="100%" viewBox="0 0 680 330" role="img"><title>Narrated proposal animation</title><desc>Scenes showing peptide release, GPCR screening, activation simulation, supercomputer scaling and outcomes.</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" style="stroke:var(--text-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><g id="stage"></g></svg>
+<div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:4px"><div id="bar" style="height:100%;width:0;background:var(--text-secondary)"></div></div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap">
+<button id="play"><i id="pi" class="ti ti-player-play" aria-hidden="true" style="vertical-align:-2px"></i> <span id="pl">Play with narration</span></button>
+<button id="prev" aria-label="Previous scene"><i class="ti ti-player-skip-back" aria-hidden="true"></i></button>
+<button id="next" aria-label="Next scene"><i class="ti ti-player-skip-forward" aria-hidden="true"></i></button>
+<button id="vol" aria-label="Turn narration off"><i id="vi" class="ti ti-volume" aria-hidden="true"></i></button>
+<div id="dots" style="display:flex;gap:8px;margin-left:8px;align-items:center"></div>
+</div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+<label for="vsel" style="font-size:13px;color:var(--text-secondary)">Voice</label>
+<select id="vsel" style="flex:1;min-width:0"></select>
+</div>
+</main>
+<script>
+const NS='http://www.w3.org/2000/svg',stage=document.getElementById('stage');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function E(tag,a,p){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);(p||stage).appendChild(e);return e}
+function T(x,y,s,c,anc,p){const e=E('text',{x,y,class:c||'ts','text-anchor':anc||'middle','dominant-baseline':'central'},p);e.textContent=s;return e}
+const cl=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const ez=v=>{v=cl(v);return v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2};
+const sg=(t,a,b)=>ez((t-a)/(b-a));
+function R(s){return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}}
+const C={pep:'#1D9E75',rec:'#7F77DD',ant:'#D85A30',hot:'#EF9F27',g:'#888780'};
+const J=a=>a.map(v=>v[0].toFixed(1)+','+v[1].toFixed(1)).join(' ');
+const f1=v=>v.toFixed(1);
+function rec(cx,top,p){
+const H=66,W=12,cy=top+H/2,B=[7,-5,9,-4,6,-7,5],xs=[0,1,2,3,4,5,6].map(i=>cx-51+i*17),h=H/2-3,rd=Math.PI/180;
+E('rect',{x:cx-80,y:top+8,width:160,height:50,fill:C.g,'fill-opacity':.1},p);
+for(let x=cx-77;x<=cx+78;x+=7.7){E('circle',{cx:f1(x),cy:top+8,r:2.5,fill:C.g,'fill-opacity':.45},p);E('circle',{cx:f1(x),cy:top+58,r:2.5,fill:C.g,'fill-opacity':.45},p)}
+const lp=E('path',{fill:'none',stroke:C.rec,'stroke-width':2.2,'stroke-linecap':'round','stroke-opacity':.9},p);
+const hs=xs.map((x,i)=>E('rect',{x:x-W/2,y:top,width:W,height:H,rx:W/2,fill:C.rec,'fill-opacity':.9,transform:`rotate(${B[i]} ${x} ${cy})`},p));
+const en=xs.map((x,i)=>{const s=Math.sin(B[i]*rd),c=Math.cos(B[i]*rd);return[[x+h*s,cy-h*c],[x-h*s,cy+h*c]]});
+const t7=en[6][1];
+E('path',{d:`M${f1(t7[0])} ${f1(t7[1])} L${f1(t7[0]+8)} ${top+54}`,fill:'none',stroke:C.rec,'stroke-width':2.2,'stroke-linecap':'round'},p);
+E('rect',{x:f1(t7[0]+8),y:top+50,width:18,height:8,rx:4,fill:C.rec,'fill-opacity':.9},p);
+E('path',{d:`M${f1(t7[0]+26)} ${top+54} Q${f1(t7[0]+38)} ${top+62} ${f1(t7[0]+30)} ${top+76}`,fill:'none',stroke:C.rec,'stroke-width':2.2,'stroke-linecap':'round'},p);
+const lo=[[0,1,1,18],[1,2,0,18],[2,3,1,22],[3,4,0,36],[4,5,1,32],[5,6,0,18]];
+function set(act){const e=en.map(q=>[q[0].slice(),q[1].slice()]);const pv=e[5][0],a=act*rd,dx=e[5][1][0]-pv[0],dy=e[5][1][1]-pv[1];
+e[5][1]=[pv[0]+dx*Math.cos(a)-dy*Math.sin(a),pv[1]+dx*Math.sin(a)+dy*Math.cos(a)];
+let d=`M${f1(e[0][0][0]-24)} ${top-16} Q${f1(e[0][0][0]-6)} ${top-14} ${f1(e[0][0][0])} ${f1(e[0][0][1])}`;
+lo.forEach(([i,j,bot,b])=>{const A=e[i][bot],Bp=e[j][bot],my=bot?Math.max(A[1],Bp[1])+b:Math.min(A[1],Bp[1])-b;d+=` M${f1(A[0])} ${f1(A[1])} Q${f1((A[0]+Bp[0])/2)} ${f1(my)} ${f1(Bp[0])} ${f1(Bp[1])}`});
+lp.setAttribute('d',d);hs[5].setAttribute('transform',`rotate(${act.toFixed(2)} ${f1(pv[0])} ${f1(pv[1])}) rotate(${B[5]} ${xs[5]} ${cy})`)}
+set(0);return{set}}
+function pep(col,n,p){const g=E('g',{opacity:0},p);const pts=[];for(let i=0;i<n;i++)pts.push([(i-(n-1)/2)*8,i%2?3:-3]);E('polyline',{points:J(pts),fill:'none',stroke:col,'stroke-width':1.5},g);pts.forEach(q=>E('circle',{cx:q[0],cy:q[1],r:4,fill:col},g));return g}
+const V=(x,k)=>(x*x-1)*(x*x-1)-k*x;
+
+const S=[
+{d:10,t:'Digestion releases thousands of peptides',n:'Babies fed human milk tend to have fewer gut problems. Digestion breaks that milk into thousands of tiny peptides. We’ve found about 14,500, and we only know what 729 of them do.',b(){
+const r=R(11);const lab=T(175,80,'Milk protein','th');
+const pts=[];for(let i=0;i<32;i++)pts.push([50+i*8,180+36*Math.sin(i*.55)]);
+const chain=E('polyline',{points:J(pts),fill:'none',stroke:C.pep,'stroke-width':1.5,'stroke-opacity':.6});
+const fr=[];for(let f=0;f<8;f++){const q=pts.slice(f*4,f*4+4);const g=E('g',{});E('polyline',{points:J(q),fill:'none',stroke:C.pep,'stroke-width':1.5,'stroke-opacity':.6},g);q.forEach(v=>E('circle',{cx:v[0],cy:v[1],r:5,fill:C.pep},g));const mx=q.reduce((a,v)=>a+v[0],0)/4,my=q.reduce((a,v)=>a+v[1],0)/4;fr.push({g,dx:420+r()*190-mx,dy:85+r()*160-my})}
+const ar=E('g',{opacity:0});E('line',{x1:318,y1:180,x2:372,y2:180,class:'arr','marker-end':'url(#arrow)'},ar);T(345,162,'Digestion','ts','middle',ar);
+const dots=[];for(let i=0;i<150;i++){dots.push({c:E('circle',{cx:400+r()*240,cy:72+r()*190,r:2.2,fill:C.pep,opacity:0}),a:3+r()*2.3,k:i<8})}
+const n1=T(520,292,'','th'),n2=T(520,314,'','ts');
+return t=>{lab.setAttribute('opacity',1-sg(t,1.5,2.5));chain.setAttribute('opacity',1-sg(t,1,1.4));ar.setAttribute('opacity',sg(t,.6,1.4));
+fr.forEach((f,i)=>{const k=sg(t,1.3+i*.1,3.3+i*.1);f.g.setAttribute('transform',`translate(${f1(f.dx*k)},${f1(f.dy*k)})`)});
+dots.forEach(d=>{const o=cl((t-d.a)/.3);const kn=d.k&&t>6.3;d.c.setAttribute('opacity',kn?1:(o*.65).toFixed(2));d.c.setAttribute('fill',kn?C.hot:C.pep);d.c.setAttribute('r',kn?4:2.2)});
+n1.textContent=t>3?Math.round(14500*sg(t,3,5.3)).toLocaleString()+' peptide sequences':'';n2.textContent=t>6.3?'Only 729 have a known function':''}}},
+{d:10,t:'Too many pairs to test at the bench',n:'Any one of them could be talking to any of 204 receptors in the gut. That’s around three million pairs, far too many to test one at a time.',b(){
+const cells=[];for(let c=0;c<34;c++)for(let w=0;w<14;w++)cells.push({e:E('rect',{x:120+c*14.7,y:70+w*15.7,width:12,height:13,rx:2,fill:C.g,'fill-opacity':.15}),c,w});
+T(370,46,'204 gastrointestinal receptors','th');T(68,168,'Peptides','th');T(68,188,'14,500','ts');const b1=T(370,314,'','th');
+return t=>{cells.forEach(o=>{let f=C.g,op=.15;if(o.c===0&&t>.6+o.w*.22){f=C.hot;op=.9}else if(o.c>0&&t>4.6+(o.c+o.w)/47*2.4){f=C.pep;op=.7}o.e.setAttribute('fill',f);o.e.setAttribute('fill-opacity',op)});
+b1.textContent=t<4.4?'Today: one receptor at a time':'Huang Complex: about 3 million pairs in parallel'}}},
+{d:10,t:'Aim 1: which peptides bind which receptors',n:'So first, we find out what binds to what. One method predicts the 3D fit, the other spots mimics of the body’s own signals. When both agree, that pair jumps the queue.',b(){
+T(40,62,'Co-folding','th','start');T(40,82,'204 receptors · Rubin GPUs','ts','start');rec(290,78);const p1=pep(C.pep,5);
+E('rect',{x:378,y:90,width:8,height:56,rx:2,fill:C.g,'fill-opacity':.15});const bar=E('rect',{x:378,y:146,width:8,height:0,rx:2,fill:C.hot});
+E('line',{x1:40,y1:182,x2:390,y2:182,style:'stroke:var(--border)','stroke-width':.5});
+T(40,212,'Motif matching','th','start');T(40,232,'83 receptors · Vera CPUs','ts','start');
+const cx2=290,cy2=258,tg=[[-30,-12],[-8,14],[18,-16],[36,10]],st=[[-70,-30],[-40,40],[50,-38],[80,30]];
+const tc=tg.map(q=>E('circle',{cx:cx2+q[0],cy:cy2+q[1],r:8,fill:'none',stroke:C.rec,'stroke-width':1,'stroke-dasharray':'3 3'}));
+const pl=E('polyline',{fill:'none',stroke:C.pep,'stroke-width':1.5});const bd=tg.map(()=>E('circle',{r:4.5,fill:C.pep}));
+E('circle',{cx:478,cy:170,r:78,fill:C.g,'fill-opacity':.06,stroke:C.g,'stroke-width':.8});E('circle',{cx:566,cy:170,r:78,fill:C.g,'fill-opacity':.06,stroke:C.g,'stroke-width':.8});
+T(448,80,'Co-folding hits','ts');T(600,80,'Motif hits','ts');T(522,272,'Found by both','th');T(522,292,'First in line for validation','ts');
+const r=R(5),inA=(x,y)=>(x-478)**2+(y-170)**2<70*70,inB=(x,y)=>(x-566)**2+(y-170)**2<70*70,ds=[];
+const add=(n,f,both)=>{let k=0;while(k<n){const x=400+r()*244,y=92+r()*156;if(f(x,y)){ds.push({e:E('circle',{cx:x,cy:y,r:both?4.2:2.6,fill:both?C.hot:C.g,opacity:0}),a:(both?5:.8)+r()*(both?3.5:5.6)});k++}}};
+add(24,(x,y)=>inA(x,y)&&!inB(x,y));add(18,(x,y)=>inB(x,y)&&!inA(x,y));add(9,(x,y)=>inA(x,y)&&inB(x,y),true);
+return t=>{const P=2.6;let p=(t%P)/P;p1.setAttribute('transform',`translate(290,${f1(36+48*sg(p,.05,.4))})`);p1.setAttribute('opacity',(1-sg(p,.85,1)).toFixed(2));
+const cyc=Math.floor(t/P),h=56*sg(p,.45,.75)*(.45+.55*((cyc*37%10)/10));bar.setAttribute('height',f1(h));bar.setAttribute('y',f1(146-h));
+const q=((t+1.3)%P)/P,k=sg(q,.1,.5),pos=tg.map((g,i)=>[cx2+st[i][0]+(g[0]-st[i][0])*k,cy2+st[i][1]+(g[1]-st[i][1])*k]);
+bd.forEach((b,i)=>{b.setAttribute('cx',f1(pos[i][0]));b.setAttribute('cy',f1(pos[i][1]))});pl.setAttribute('points',J(pos));
+const o=1-sg(q,.85,1);bd.forEach(b=>b.setAttribute('opacity',o.toFixed(2)));pl.setAttribute('opacity',(o*.6).toFixed(2));
+tc.forEach(c=>c.setAttribute('stroke',k>.99&&q<.85?C.hot:C.rec));ds.forEach(d=>d.e.setAttribute('opacity',sg(t,d.a,d.a+.4).toFixed(2)))}}},
+{d:10,t:'Aim 2: does it switch the receptor on or off?',n:'But binding isn’t the same as acting. So we simulate seventeen receptors to see whether a peptide switches one on, or quietly blocks it, the way casoxin does.',b(){
+E('line',{x1:340,y1:16,x2:340,y2:318,style:'stroke:var(--border)','stroke-width':.5});
+T(22,62,'Outside','ts','start');T(22,140,'Inside','ts','start');
+const mk=(cx,ag)=>{T(cx,26,ag?'Agonist':'Antagonist (e.g., casoxin)','th');const rr=rec(cx,70);
+const gp=E('ellipse',{cx:cx-4,cy:174,rx:22,ry:9,fill:C.g,'fill-opacity':.2}),gb=E('ellipse',{cx:cx+24,cy:179,rx:10,ry:7,fill:C.g,'fill-opacity':.2}),ring=E('ellipse',{cx:cx-4,cy:174,rx:22,ry:9,fill:'none',stroke:C.pep,'stroke-width':1,opacity:0}),lb=T(cx,200,'','ts');
+const pp=pep(ag?C.pep:C.ant,5),cv=E('path',{fill:'none',style:'stroke:var(--text-secondary)','stroke-width':1.5}),ball=E('circle',{r:6,fill:ag?C.pep:C.ant});
+T(cx-83,306,'Inactive','ts');T(cx+83,306,'Active','ts');return{cx,ag,rr,gp,gb,ring,lb,pp,cv,ball}};
+const P=[mk(170,true),mk(510,false)];
+return t=>{P.forEach(o=>{const kp=sg(t,.3,1.7);o.pp.setAttribute('transform',`translate(${f1(o.cx-90+90*kp)},${f1(44+32*kp)})`);o.pp.setAttribute('opacity',sg(t,.1,.5).toFixed(2));
+let tilt,bx,ang;if(o.ag){tilt=.5*sg(t,2.5,3.9);bx=-1+2*sg(t,3.5,5.1);ang=-18*sg(t,2.5,3.7)}else{tilt=-.5*sg(t,2.5,3.9);bx=-1+.04*Math.sin(t*7)*sg(t,2.5,3.5);ang=1.5*Math.sin(t*6)*sg(t,2.5,3)}
+o.rr.set(ang);
+let d='';for(let i=0;i<=48;i++){const x=-1.4+2.8*i/48;d+=(i?'L':'M')+f1(o.cx+x*83)+' '+f1(266-V(x,tilt)*30)}o.cv.setAttribute('d',d);
+o.ball.setAttribute('cx',f1(o.cx+bx*83));o.ball.setAttribute('cy',f1(266-V(bx,tilt)*30-6.5));
+if(o.ag){const on=sg(t,3.9,4.7);[o.gp,o.gb].forEach(e=>{e.setAttribute('fill',on>0?C.pep:C.g);e.setAttribute('fill-opacity',(.2+.5*on).toFixed(2))});const rp=(((t-4.7)%1.2)+1.2)%1.2/1.2;o.ring.setAttribute('rx',f1(22+rp*18));o.ring.setAttribute('ry',f1(9+rp*6));o.ring.setAttribute('opacity',t>4.7?((1-rp)*.8).toFixed(2):0);o.lb.textContent=t>4.7?'G protein activated':''}else{o.lb.textContent=t>4.7?'Bound, but held off':''}})}}},
+{d:10,t:'The hero run: all 144 GPUs at once',n:'That’s a lot of computing. On the Huang Complex, all 144 GPUs tackle it together, so years of work shrink to a couple of weeks.',b(){
+const r=R(3),g=[];[90,390].forEach(rx=>{E('rect',{x:rx,y:50,width:200,height:200,rx:8,fill:'none',style:'stroke:var(--border-strong)','stroke-width':.8});T(rx+100,34,'NVL72 rack · 72 GPUs','ts');for(let c=0;c<8;c++)for(let w=0;w<9;w++)g.push({e:E('rect',{x:rx+14+c*21.5,y:64+w*19.1,width:17,height:14,rx:2,fill:C.g,'fill-opacity':.2}),a:.3+r()*2.6,ph:r()*6})});
+const ln=[70,110,150,190,230].map(y=>E('path',{d:`M290 ${y} C340 ${y},340 ${280-y},390 ${280-y}`,fill:'none',stroke:C.hot,'stroke-width':1.2,'stroke-dasharray':'4 6',opacity:0}));
+T(340,262,'NVLink','ts');T(40,286,'Current cluster','ts','start');T(40,314,'Huang Complex','ts','start');
+const b1=E('rect',{x:150,y:280,width:0,height:12,rx:3,fill:C.g,'fill-opacity':.5}),b2=E('rect',{x:150,y:308,width:0,height:12,rx:3,fill:C.hot});
+const l1=T(158,286,'Years','ts','start'),l2=T(182,314,'1–2 weeks','ts','start');
+return t=>{g.forEach(o=>{const on=t>o.a;o.e.setAttribute('fill',on?C.hot:C.g);o.e.setAttribute('fill-opacity',on?(.55+.35*Math.sin(t*6+o.ph)).toFixed(2):.2)});
+ln.forEach(l=>{l.setAttribute('opacity',(sg(t,1.5,2.5)*.85).toFixed(2));l.setAttribute('stroke-dashoffset',f1(-t*30))});
+const w1=420*sg(t,4,7.5),w2=24*sg(t,4,4.5);b1.setAttribute('width',f1(w1));b2.setAttribute('width',f1(w2));
+l1.setAttribute('x',f1(158+w1));l1.setAttribute('opacity',sg(t,4,4.4).toFixed(2));l2.setAttribute('opacity',sg(t,4.2,4.6).toFixed(2))}}},
+{d:11,t:'What the project delivers',n:'And the payoff? The first real map of how milk peptides talk to the gut, plus models that can sort new ones without starting from scratch. That means better formula, new therapies, and much stronger grant proposals.',b(){
+const r=R(9),cs=[];for(let c=0;c<16;c++)for(let w=0;w<6;w++){const v=r();cs.push({e:E('rect',{x:220+c*15,y:30+w*15,width:12,height:12,rx:2,fill:C.g,'fill-opacity':.12}),f:v<.13?C.pep:v<.21?C.ant:null,a:.3+(c+w)/21*2})}
+E('rect',{x:480,y:46,width:12,height:12,rx:2,fill:C.pep});T(500,52,'Agonist','ts','start');E('rect',{x:480,y:70,width:12,height:12,rx:2,fill:C.ant});T(500,76,'Antagonist','ts','start');
+const ti=T(340,140,'Peptide–receptor map + predictive model','th');
+const bx=[['Better infant formula','Built on function, not composition'],['Beyond infancy','Diabetes, obesity, and IBD targets'],['External funding','NIH R21 and R01, USDA, NSF, industry'],['Teaching and workforce','Omniverse molecular animations']].map((q,i)=>{const x=i%2?350:70,y=i<2?172:236;const g=E('g',{opacity:0});E('rect',{x,y,width:260,height:52,rx:8,class:'box','stroke-width':.5},g);T(x+130,y+18,q[0],'th','middle',g);T(x+130,y+36,q[1],'ts','middle',g);return g});
+return t=>{cs.forEach(o=>{if(o.f&&t>o.a){o.e.setAttribute('fill',o.f);o.e.setAttribute('fill-opacity',.85)}else{o.e.setAttribute('fill',C.g);o.e.setAttribute('fill-opacity',t>o.a?.22:.12)}});
+ti.setAttribute('opacity',sg(t,1.8,2.4).toFixed(2));bx.forEach((g,i)=>{const k=sg(t,4.5+i*.6,5+i*.6);g.setAttribute('opacity',k.toFixed(2));g.setAttribute('transform',`translate(0,${f1((1-k)*8)})`)})}}}
+];
+
+const synth=('speechSynthesis' in window)?window.speechSynthesis:null;let voice=null,voices=[];
+const vsel=document.getElementById('vsel');
+function vscore(v){const s=v.name+' '+v.lang;if(/Fiona|sct|scotland|scottish/i.test(s))return 100;if(/en[-_]GB/i.test(v.lang))return /Natural|Neural|Online|Libby|Sonia|Maisie|Ryan|Google UK English/i.test(v.name)?60:50;if(/en[-_]IE/i.test(v.lang))return 45;if(/^en/i.test(v.lang))return /Natural|Neural|Online/i.test(v.name)?15:10;return 0}
+function loadVoices(){if(!synth)return;const keep=voice&&voice.name;voices=synth.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vscore(b)-vscore(a));
+vsel.innerHTML='';voices.forEach((v,i)=>{const o=document.createElement('option');o.value=i;o.textContent=v.name+' ('+v.lang+')';vsel.appendChild(o)});
+let idx=keep?voices.findIndex(v=>v.name===keep):0;if(idx<0)idx=0;vsel.value=idx;voice=voices[idx]||null;setNote()}
+function setNote(){if(!synth)vsel.disabled=true}
+vsel.onchange=()=>{voice=voices[+vsel.value]||null;setNote();if(playing)load(si)};
+if(synth){loadVoices();synth.onvoiceschanged=loadVoices}else setNote();
+let si=0,el=0,playing=false,ended=false,narr=!!synth,done=true,utt=null,last=performance.now(),tick=()=>{};
+function speak(){if(!synth){done=true;return}synth.cancel();if(!narr||!playing){done=true;return}
+const u=new SpeechSynthesisUtterance(S[si].n.replace(/3D/g,'3-D'));if(voice){u.voice=voice;u.lang=voice.lang}u.rate=.95;u.pitch=1;done=false;u.onend=u.onerror=()=>{if(utt===u)done=true};utt=u;synth.speak(u)}
+const dots=document.getElementById('dots'),bar=document.getElementById('bar'),db=[];
+S.forEach((s,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Go to scene '+(i+1));b.style.cssText='width:10px;height:10px;min-width:0;min-height:0;padding:0;border-radius:50%;border:none;cursor:pointer';b.onclick=()=>{ended=false;load(i);ui()};dots.appendChild(b);db.push(b)});
+function load(i){si=(i+S.length)%S.length;stage.innerHTML='';tick=S[si].b();el=playing?0:(si===0&&!ended?0:S[si].d-.01);
+document.getElementById('capk').textContent='Scene '+(si+1)+' of '+S.length;document.getElementById('capt').textContent=S[si].t;document.getElementById('caps').textContent=S[si].n;
+db.forEach((b,j)=>b.style.background=j===si?'var(--text-primary)':'var(--border-strong)');speak()}
+function ui(){document.getElementById('pi').className='ti '+(playing?'ti-player-pause':ended?'ti-reload':'ti-player-play');document.getElementById('pl').textContent=playing?'Pause':ended?'Replay':(si===0&&el<.05?'Play with narration':'Resume')}
+function setPlay(p){playing=p;if(p){if(ended){ended=false;load(0)}else load(si)}else{if(synth)synth.cancel();done=true}ui()}
+document.getElementById('play').onclick=()=>setPlay(!playing);
+document.getElementById('prev').onclick=()=>{ended=false;load(si-1);ui()};
+document.getElementById('next').onclick=()=>{ended=false;load(si+1);ui()};
+document.getElementById('vol').onclick=()=>{narr=!narr&&!!synth;document.getElementById('vi').className='ti '+(narr?'ti-volume':'ti-volume-off');document.getElementById('vol').setAttribute('aria-label',narr?'Turn narration off':'Turn narration on');if(!narr){if(synth)synth.cancel();done=true}};
+if(!synth){document.getElementById('vi').className='ti ti-volume-off'}
+load(0);ui();
+function fr(now){const dt=Math.min(.1,(now-last)/1000);last=now;
+if(playing){el+=dt;const d=S[si].d;if(el>=d&&(done||!narr||el>d+10)){if(si===S.length-1){ended=true;playing=false;ui()}else load(si+1)}}
+tick(reduce?S[si].d:el);bar.style.width=(cl(el/S[si].d)*100).toFixed(1)+'%';requestAnimationFrame(fr)}
+requestAnimationFrame(fr);
+</script>
+</body>
+</html>
