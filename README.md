@@ -4,4 +4,4 @@ Narrated, animated overview of the Huang Complex Supercomputing Seed Fund propos
 
 **Live page:** https://kuhfeldrf.github.io/huang-seedfunding-proposal/
 
-Six scenes cover peptide release during digestion, the scale of the peptide–receptor screen, Aim 1 (binding: co-folding + motif matching), Aim 2 (activation simulations), the 144-GPU hero run, and expected outcomes. Narration uses the browser's built-in speech synthesis; captions carry it when voice is unavailable.
+Six scenes cover peptide release during digestion, the scale of the peptide–receptor screen, Aim 1 (binding: co-folding + motif matching), Aim 2 (activation simulations), the 144-GPU hero run, and expected outcomes. Narration is pre-recorded with the open-source Kokoro-82M neural text-to-speech model (British male voice `bm_george`, Apache-2.0) and stored as MP3s in `audio/`, so it sounds the same in every browser and needs no server. Captions follow along on screen.

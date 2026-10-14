@@ -35,7 +35,6 @@ select{background:var(--surface-2);padding:6px 8px}
 <button id="vol" aria-label="Turn narration off"><i id="vi" class="ti ti-volume" aria-hidden="true"></i></button>
 <div id="dots" style="display:flex;gap:8px;margin-left:8px;align-items:center"></div>
 </div>
-<pre id="dbg" hidden style="font-size:12px;white-space:pre-wrap;color:var(--text-secondary);border-top:.5px solid var(--border);margin-top:16px;padding-top:8px"></pre>
 </main>
 <script>
 const NS='http://www.w3.org/2000/svg',stage=document.getElementById('stage');
@@ -71,7 +70,7 @@ function pep(col,n,p){const g=E('g',{opacity:0},p);const pts=[];for(let i=0;i<n;
 const V=(x,k)=>(x*x-1)*(x*x-1)-k*x;
 
 const S=[
-{d:10,t:'Digestion releases thousands of peptides',n:'Babies fed human milk tend to have fewer gut problems. Digestion breaks that milk into thousands of tiny peptides. We’ve found about 14,500, and we only know what 729 of them do.',b(){
+{d0:10,d:15.3,t:'Digestion releases thousands of peptides',n:'Babies fed human milk tend to have fewer gut problems. Digestion breaks that milk into thousands of tiny peptides. We’ve found about 14,500, and we only know what 729 of them do.',b(){
 const r=R(11);const lab=T(175,80,'Milk protein','th');
 const pts=[];for(let i=0;i<32;i++)pts.push([50+i*8,180+36*Math.sin(i*.55)]);
 const chain=E('polyline',{points:J(pts),fill:'none',stroke:C.pep,'stroke-width':1.5,'stroke-opacity':.6});
@@ -83,12 +82,12 @@ return t=>{lab.setAttribute('opacity',1-sg(t,1.5,2.5));chain.setAttribute('opaci
 fr.forEach((f,i)=>{const k=sg(t,1.3+i*.1,3.3+i*.1);f.g.setAttribute('transform',`translate(${f1(f.dx*k)},${f1(f.dy*k)})`)});
 dots.forEach(d=>{const o=cl((t-d.a)/.3);const kn=d.k&&t>6.3;d.c.setAttribute('opacity',kn?1:(o*.65).toFixed(2));d.c.setAttribute('fill',kn?C.hot:C.pep);d.c.setAttribute('r',kn?4:2.2)});
 n1.textContent=t>3?Math.round(14500*sg(t,3,5.3)).toLocaleString()+' peptide sequences':'';n2.textContent=t>6.3?'Only 729 have a known function':''}}},
-{d:10,t:'Too many pairs to test at the bench',n:'Any one of them could be talking to any of 204 receptors in the gut. That’s around three million pairs, far too many to test one at a time.',b(){
+{d0:10,d:10.3,t:'Too many pairs to test at the bench',n:'Any one of them could be talking to any of 204 receptors in the gut. That’s around three million pairs, far too many to test one at a time.',b(){
 const cells=[];for(let c=0;c<34;c++)for(let w=0;w<14;w++)cells.push({e:E('rect',{x:120+c*14.7,y:70+w*15.7,width:12,height:13,rx:2,fill:C.g,'fill-opacity':.15}),c,w});
 T(370,46,'204 gastrointestinal receptors','th');T(68,168,'Peptides','th');T(68,188,'14,500','ts');const b1=T(370,314,'','th');
 return t=>{cells.forEach(o=>{let f=C.g,op=.15;if(o.c===0&&t>.6+o.w*.22){f=C.hot;op=.9}else if(o.c>0&&t>4.6+(o.c+o.w)/47*2.4){f=C.pep;op=.7}o.e.setAttribute('fill',f);o.e.setAttribute('fill-opacity',op)});
 b1.textContent=t<4.4?'Today: one receptor at a time':'Huang Complex: about 3 million pairs in parallel'}}},
-{d:10,t:'Aim 1: which peptides bind which receptors',n:'So first, we find out what binds to what. One method predicts the 3D fit, the other spots mimics of the body’s own signals. When both agree, that pair jumps the queue.',b(){
+{d0:10,d:11.8,t:'Aim 1: which peptides bind which receptors',n:'So first, we find out what binds to what. One method predicts the 3D fit, the other spots mimics of the body’s own signals. When both agree, that pair jumps the queue.',b(){
 T(40,62,'Co-folding','th','start');T(40,82,'204 receptors · Rubin GPUs','ts','start');rec(290,78);const p1=pep(C.pep,5);
 E('rect',{x:378,y:90,width:8,height:56,rx:2,fill:C.g,'fill-opacity':.15});const bar=E('rect',{x:378,y:146,width:8,height:0,rx:2,fill:C.hot});
 E('line',{x1:40,y1:182,x2:390,y2:182,style:'stroke:var(--border)','stroke-width':.5});
@@ -107,7 +106,7 @@ const q=((t+1.3)%P)/P,k=sg(q,.1,.5),pos=tg.map((g,i)=>[cx2+st[i][0]+(g[0]-st[i][
 bd.forEach((b,i)=>{b.setAttribute('cx',f1(pos[i][0]));b.setAttribute('cy',f1(pos[i][1]))});pl.setAttribute('points',J(pos));
 const o=1-sg(q,.85,1);bd.forEach(b=>b.setAttribute('opacity',o.toFixed(2)));pl.setAttribute('opacity',(o*.6).toFixed(2));
 tc.forEach(c=>c.setAttribute('stroke',k>.99&&q<.85?C.hot:C.rec));ds.forEach(d=>d.e.setAttribute('opacity',sg(t,d.a,d.a+.4).toFixed(2)))}}},
-{d:10,t:'Aim 2: does it switch the receptor on or off?',n:'But binding isn’t the same as acting. So we simulate seventeen receptors to see whether a peptide switches one on, or quietly blocks it, the way casoxin does.',b(){
+{d0:10,d:11.2,t:'Aim 2: does it switch the receptor on or off?',n:'But binding isn’t the same as acting. So we simulate seventeen receptors to see whether a peptide switches one on, or quietly blocks it, the way casoxin does.',b(){
 E('line',{x1:340,y1:16,x2:340,y2:318,style:'stroke:var(--border)','stroke-width':.5});
 T(22,62,'Outside','ts','start');T(22,140,'Inside','ts','start');
 const mk=(cx,ag)=>{T(cx,26,ag?'Agonist':'Antagonist (e.g., casoxin)','th');const rr=rec(cx,70);
@@ -121,7 +120,7 @@ o.rr.set(ang);
 let d='';for(let i=0;i<=48;i++){const x=-1.4+2.8*i/48;d+=(i?'L':'M')+f1(o.cx+x*83)+' '+f1(266-V(x,tilt)*30)}o.cv.setAttribute('d',d);
 o.ball.setAttribute('cx',f1(o.cx+bx*83));o.ball.setAttribute('cy',f1(266-V(bx,tilt)*30-6.5));
 if(o.ag){const on=sg(t,3.9,4.7);[o.gp,o.gb].forEach(e=>{e.setAttribute('fill',on>0?C.pep:C.g);e.setAttribute('fill-opacity',(.2+.5*on).toFixed(2))});const rp=(((t-4.7)%1.2)+1.2)%1.2/1.2;o.ring.setAttribute('rx',f1(22+rp*18));o.ring.setAttribute('ry',f1(9+rp*6));o.ring.setAttribute('opacity',t>4.7?((1-rp)*.8).toFixed(2):0);o.lb.textContent=t>4.7?'G protein activated':''}else{o.lb.textContent=t>4.7?'Bound, but held off':''}})}}},
-{d:10,t:'The hero run: all 144 GPUs at once',n:'That’s a lot of computing. On the Huang Complex, all 144 GPUs tackle it together, so years of work shrink to a couple of weeks.',b(){
+{d0:10,d:10.3,t:'The hero run: all 144 GPUs at once',n:'That’s a lot of computing. On the Huang Complex, all 144 GPUs tackle it together, so years of work shrink to a couple of weeks.',b(){
 const r=R(3),g=[];[90,390].forEach(rx=>{E('rect',{x:rx,y:50,width:200,height:200,rx:8,fill:'none',style:'stroke:var(--border-strong)','stroke-width':.8});T(rx+100,34,'NVL72 rack · 72 GPUs','ts');for(let c=0;c<8;c++)for(let w=0;w<9;w++)g.push({e:E('rect',{x:rx+14+c*21.5,y:64+w*19.1,width:17,height:14,rx:2,fill:C.g,'fill-opacity':.2}),a:.3+r()*2.6,ph:r()*6})});
 const ln=[70,110,150,190,230].map(y=>E('path',{d:`M290 ${y} C340 ${y},340 ${280-y},390 ${280-y}`,fill:'none',stroke:C.hot,'stroke-width':1.2,'stroke-dasharray':'4 6',opacity:0}));
 T(340,262,'NVLink','ts');T(40,286,'Current cluster','ts','start');T(40,314,'Huang Complex','ts','start');
@@ -131,7 +130,7 @@ return t=>{g.forEach(o=>{const on=t>o.a;o.e.setAttribute('fill',on?C.hot:C.g);o.
 ln.forEach(l=>{l.setAttribute('opacity',(sg(t,1.5,2.5)*.85).toFixed(2));l.setAttribute('stroke-dashoffset',f1(-t*30))});
 const w1=420*sg(t,4,7.5),w2=24*sg(t,4,4.5);b1.setAttribute('width',f1(w1));b2.setAttribute('width',f1(w2));
 l1.setAttribute('x',f1(158+w1));l1.setAttribute('opacity',sg(t,4,4.4).toFixed(2));l2.setAttribute('opacity',sg(t,4.2,4.6).toFixed(2))}}},
-{d:11,t:'What the project delivers',n:'And the payoff? The first real map of how milk peptides talk to the gut, plus models that can sort new ones without starting from scratch. That means better formula, new therapies, and much stronger grant proposals.',b(){
+{d0:11,d:14.8,t:'What the project delivers',n:'And the payoff? The first real map of how milk peptides talk to the gut, plus models that can sort new ones without starting from scratch. That means better formula, new therapies, and much stronger grant proposals.',b(){
 const r=R(9),cs=[];for(let c=0;c<16;c++)for(let w=0;w<6;w++){const v=r();cs.push({e:E('rect',{x:220+c*15,y:30+w*15,width:12,height:12,rx:2,fill:C.g,'fill-opacity':.12}),f:v<.13?C.pep:v<.21?C.ant:null,a:.3+(c+w)/21*2})}
 E('rect',{x:480,y:46,width:12,height:12,rx:2,fill:C.pep});T(500,52,'Agonist','ts','start');E('rect',{x:480,y:70,width:12,height:12,rx:2,fill:C.ant});T(500,76,'Antagonist','ts','start');
 const ti=T(340,140,'Peptide–receptor map + predictive model','th');
@@ -140,33 +139,27 @@ return t=>{cs.forEach(o=>{if(o.f&&t>o.a){o.e.setAttribute('fill',o.f);o.e.setAtt
 ti.setAttribute('opacity',sg(t,1.8,2.4).toFixed(2));bx.forEach((g,i)=>{const k=sg(t,4.5+i*.6,5+i*.6);g.setAttribute('opacity',k.toFixed(2));g.setAttribute('transform',`translate(0,${f1((1-k)*8)})`)})}}}
 ];
 
-const synth=('speechSynthesis' in window)?window.speechSynthesis:null;let voice=null;
-const GB_MALE=/Google UK English Male|Daniel|Arthur|Oliver|Ryan|George|Thomas|Alfie|Elliot|Noah|Ethan|male/i,GB_FEMALE=/female|Libby|Sonia|Maisie|Hazel|Susan|Kate|Serena|Stephanie|Martha|Fiona|Moira/i;
-function vscore(v){const gb=/en[-_]GB/i.test(v.lang);if(/Google UK English Male/i.test(v.name))return 100;if(gb&&GB_MALE.test(v.name)&&!GB_FEMALE.test(v.name))return 80;if(gb&&!GB_FEMALE.test(v.name))return 50;if(gb)return 30;if(/^en/i.test(v.lang))return 10;return 0}
-const DBG=/[?&]voices/.test(location.search),dbgEl=document.getElementById('dbg'),dbgLog=[];
-function dbg(m){if(!DBG)return;if(m)dbgLog.push(new Date().toLocaleTimeString()+'  '+m);dbgEl.hidden=false;const all=synth?synth.getVoices():[];dbgEl.textContent='Selected voice: '+(voice?voice.name+' ('+voice.lang+')':'none yet')+'\nVoices in this browser: '+all.length+'\n'+all.filter(v=>/^en/i.test(v.lang)).map(v=>'  '+vscore(v)+'  '+v.name+' ('+v.lang+')'+(v.localService?'':' [online]')).join('\n')+'\n\nEvents:\n'+dbgLog.join('\n')}
-function loadVoices(){if(!synth)return;const vs=synth.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vscore(b)-vscore(a));voice=vs[0]||null;dbg('voices loaded')}
-if(synth){loadVoices();synth.onvoiceschanged=()=>{loadVoices();if(voice&&wv){wv=false;if(playing&&narr)speak()}}}
-let wv=false,wt=false,si=0,el=0,playing=false,ended=false,narr=!!synth,done=true,utt=null,last=performance.now(),tick=()=>{};
-function speak(){if(!synth){done=true;return}if(!voice)loadVoices();synth.cancel();if(!narr||!playing){done=true;return}
-if(!voice&&!wt){wv=true;wt=true;done=false;setTimeout(()=>{if(wv){wv=false;if(playing&&narr)speak()}},2000);return}
-const u=new SpeechSynthesisUtterance(S[si].n.replace(/3D/g,'3-D'));if(voice){u.voice=voice;u.lang=voice.lang}u.rate=.95;u.pitch=1;done=false;u.onend=()=>{if(utt===u)done=true};u.onerror=e=>{dbg('ERROR '+(e&&e.error)+' with '+(u.voice?u.voice.name:'default voice'));if(utt===u)done=true};u.onstart=()=>dbg('speaking with '+(u.voice?u.voice.name:'BROWSER DEFAULT'));utt=u;synth.speak(u)}
+// Narration: pre-recorded neural voice clips (audio/scene-N.mp3), played with one reusable audio element.
+const A=new Audio();A.preload='auto';const clip=i=>'audio/scene-'+(i+1)+'.mp3';
+S.forEach((_,i)=>{const w=new Audio();w.preload='auto';w.src=clip(i)});
+let si=0,el=0,playing=false,ended=false,narr=true,done=true,resumable=false,last=performance.now(),tick=()=>{};
+A.onended=A.onerror=()=>{done=true};
+function speak(){A.pause();A.src=clip(si);A.muted=!narr;done=!playing;if(playing)A.play().catch(()=>{done=true})}
 const dots=document.getElementById('dots'),bar=document.getElementById('bar'),db=[];
 S.forEach((s,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Go to scene '+(i+1));b.style.cssText='width:10px;height:10px;min-width:0;min-height:0;padding:0;border-radius:50%;border:none;cursor:pointer';b.onclick=()=>{ended=false;load(i);ui()};dots.appendChild(b);db.push(b)});
 function load(i){si=(i+S.length)%S.length;stage.innerHTML='';tick=S[si].b();el=playing?0:(si===0&&!ended?0:S[si].d-.01);
 document.getElementById('capk').textContent='Scene '+(si+1)+' of '+S.length;document.getElementById('capt').textContent=S[si].t;document.getElementById('caps').textContent=S[si].n;
-db.forEach((b,j)=>b.style.background=j===si?'var(--text-primary)':'var(--border-strong)');speak()}
+db.forEach((b,j)=>b.style.background=j===si?'var(--text-primary)':'var(--border-strong)');resumable=false;speak()}
 function ui(){document.getElementById('pi').className='ti '+(playing?'ti-player-pause':ended?'ti-reload':'ti-player-play');document.getElementById('pl').textContent=playing?'Pause':ended?'Replay':(si===0&&el<.05?'Play with narration':'Resume')}
-function setPlay(p){playing=p;if(p){if(ended){ended=false;load(0)}else load(si)}else{if(synth)synth.cancel();done=true}ui()}
+function setPlay(p){playing=p;if(p){if(ended){ended=false;load(0)}else if(resumable){resumable=false;if(!done)A.play().catch(()=>{done=true})}else load(si)}else{A.pause();resumable=true}ui()}
 document.getElementById('play').onclick=()=>setPlay(!playing);
 document.getElementById('prev').onclick=()=>{ended=false;load(si-1);ui()};
 document.getElementById('next').onclick=()=>{ended=false;load(si+1);ui()};
-document.getElementById('vol').onclick=()=>{narr=!narr&&!!synth;document.getElementById('vi').className='ti '+(narr?'ti-volume':'ti-volume-off');document.getElementById('vol').setAttribute('aria-label',narr?'Turn narration off':'Turn narration on');if(!narr){if(synth)synth.cancel();done=true}};
-if(!synth){document.getElementById('vi').className='ti ti-volume-off'}
+document.getElementById('vol').onclick=()=>{narr=!narr;A.muted=!narr;document.getElementById('vi').className='ti '+(narr?'ti-volume':'ti-volume-off');document.getElementById('vol').setAttribute('aria-label',narr?'Turn narration off':'Turn narration on')};
 load(0);ui();
 function fr(now){const dt=Math.min(.1,(now-last)/1000);last=now;
-if(playing){el+=dt;const d=S[si].d;if(el>=d&&(done||!narr||el>d+10)){if(si===S.length-1){ended=true;playing=false;ui()}else load(si+1)}}
-tick(reduce?S[si].d:el);bar.style.width=(cl(el/S[si].d)*100).toFixed(1)+'%';requestAnimationFrame(fr)}
+if(playing){el+=dt;const d=S[si].d;if(el>=d&&(done||!narr||el>d+15)){if(si===S.length-1){ended=true;playing=false;ui()}else load(si+1)}}
+tick(reduce?S[si].d0:el*S[si].d0/S[si].d);bar.style.width=(cl(el/S[si].d)*100).toFixed(1)+'%';requestAnimationFrame(fr)}
 requestAnimationFrame(fr);
 </script>
 </body>
