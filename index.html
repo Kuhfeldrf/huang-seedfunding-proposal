@@ -46,7 +46,7 @@ const ez=v=>{v=cl(v);return v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2};
 const sg=(t,a,b)=>ez((t-a)/(b-a));
 const lerp=(a,b,k)=>a+(b-a)*k;
 function R(s){return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}}
-const C={pep:'#1D9E75',rec:'#7F77DD',recD:'#534AB7',ant:'#D85A30',hot:'#EF9F27',g:'#888780'};
+const C={pep:'#1D9E75',rec:'#7F77DD',recD:'#534AB7',ant:'#D85A30',hot:'#EF9F27',g:'#888780',endo:'#378ADD'};
 const J=a=>a.map(v=>v[0].toFixed(1)+','+v[1].toFixed(1)).join(' ');
 const f1=v=>v.toFixed(1);
 const op=(e,v)=>e.setAttribute('opacity',cl(v).toFixed(2));
@@ -105,15 +105,21 @@ loop.setAttribute('d',d);hp.setAttribute('d',hd)}
 set(o.fold==null?1:o.fold,0);
 return{g,mid,set,pocket:[10,-24],cavity:[30,48]}}
 
-// Heterotrimeric G protein: G-alpha (Ras + helical domains, alpha-5 helix on top), G-beta, G-gamma.
-function gprot(p){const g=E('g',{},p);
-E('ellipse',{cx:22,cy:46,rx:24,ry:12,fill:C.g,'fill-opacity':.28},g);E('rect',{x:40,y:28,width:8,height:20,rx:4,fill:C.g,'fill-opacity':.35},g);
-const hd=E('ellipse',{cx:-24,cy:14,rx:13,ry:10,fill:C.g,'fill-opacity':.3},g),a=E('ellipse',{cx:0,cy:24,rx:26,ry:15,fill:C.g,'fill-opacity':.35},g),a5=E('rect',{x:-4.5,y:-2,width:9,height:22,rx:4.5,fill:C.g,'fill-opacity':.55},g);
-const ring=E('ellipse',{cx:0,cy:24,rx:26,ry:15,fill:'none',stroke:C.pep,'stroke-width':1.3,opacity:0},g);
-T(0,26,'Gα','ts','middle',g);T(24,47,'Gβγ','ts','middle',g);
-return{g,set(x,y,on,t){g.setAttribute('transform',`translate(${f1(x)},${f1(y)})`);[a,a5,hd].forEach(e=>e.setAttribute('fill',on>0?C.pep:C.g));
-a.setAttribute('fill-opacity',(.35+.45*on).toFixed(2));a5.setAttribute('fill-opacity',(.55+.4*on).toFixed(2));hd.setAttribute('fill-opacity',(.3+.3*on).toFixed(2));
-const rp=(((t%1.2)+1.2)%1.2)/1.2;ring.setAttribute('rx',f1(26+rp*16));ring.setAttribute('ry',f1(15+rp*8));ring.setAttribute('opacity',on>.99?((1-rp)*.8).toFixed(2):0)}}}
+// Heterotrimeric G protein: G-alpha (Ras + helical domains, alpha-5 helix that inserts into the receptor, GDP/GTP pocket) and G-beta-gamma.
+// set(x, y, on, t, ex, sp): ex = GDP->GTP exchange (0..1), sp = G-alpha / G-beta-gamma separation (0..1).
+function gprot(p){const g=E('g',{},p),bg=E('g',{},g),ga=E('g',{},g);
+const be=E('ellipse',{cx:22,cy:46,rx:24,ry:12,fill:C.g,'fill-opacity':.28},bg),gm=E('rect',{x:40,y:28,width:8,height:20,rx:4,fill:C.g,'fill-opacity':.35},bg);T(24,47,'Gβγ','ts','middle',bg);
+const hd=E('ellipse',{cx:-24,cy:14,rx:14,ry:11,fill:C.g,'fill-opacity':.3},ga),a=E('ellipse',{cx:0,cy:24,rx:26,ry:15,fill:C.g,'fill-opacity':.35},ga),a5=E('rect',{x:-4.5,y:-2,width:9,height:22,rx:4.5,fill:C.g,'fill-opacity':.55},ga);
+const ring=E('ellipse',{cx:0,cy:24,rx:26,ry:15,fill:'none',stroke:C.pep,'stroke-width':1.3,opacity:0},ga);
+T(2,27,'Gα','ts','middle',ga);const nu=T(-25,14,'GDP','ts','middle',ga);nu.setAttribute('style','font-size:8.5px;font-weight:500');
+const gone=T(-25,14,'GDP','ts','middle',g);gone.setAttribute('style','font-size:8.5px;font-weight:500');op(gone,0);
+return{g,set(x,y,on,t,ex=0,sp=0){g.setAttribute('transform',`translate(${f1(x)},${f1(y)})`);
+[a,a5,hd].forEach(e=>e.setAttribute('fill',on>0?C.pep:C.g));a.setAttribute('fill-opacity',(.35+.45*on).toFixed(2));a5.setAttribute('fill-opacity',(.55+.4*on).toFixed(2));hd.setAttribute('fill-opacity',(.3+.3*on).toFixed(2));
+[be,gm].forEach(e=>e.setAttribute('fill',sp>.5?C.pep:C.g));be.setAttribute('fill-opacity',(.28+.3*sp).toFixed(2));
+nu.textContent=ex<.35?'GDP':'GTP';op(nu,ex<.35?1-ex/.35:sg(ex,.6,1));
+op(gone,ex>0&&ex<1?1-ex:0);gone.setAttribute('transform',`translate(${f1(-30*ex)},${f1(22*ex)})`);
+ga.setAttribute('transform',`translate(${f1(-62*sp)},${f1(12*sp)})`);bg.setAttribute('transform',`translate(${f1(50*sp)},${f1(-2*sp)})`);
+const rp=(((t%1.2)+1.2)%1.2)/1.2;ring.setAttribute('rx',f1(26+rp*16));ring.setAttribute('ry',f1(15+rp*8));ring.setAttribute('opacity',on>.99&&sp<.01?((1-rp)*.8).toFixed(2):0)}}}
 function place(o,x,y,s){o.g.setAttribute('transform',`translate(${x},${y}) scale(${s})`)}
 
 const S=[
@@ -168,31 +174,38 @@ T(370,46,'204 gastrointestinal receptors','th');T(68,168,'Peptides','th');T(68,1
 return t=>{cells.forEach(o=>{let f=C.g,a=.15;if(o.c===0&&t>.8+o.w*.3){f=C.hot;a=.9}else if(o.c>0&&t>6.1+(o.c+o.w)/47*2.4){f=C.pep;a=.7}o.e.setAttribute('fill',f);o.e.setAttribute('fill-opacity',a)});
 b1.textContent=t<5.8?'At the bench: one receptor at a time':'Huang Complex: about 3 million pairs in parallel'}}},
 
-{d:17.98,t:'Aim 1: which peptides bind which receptors',n:'First, we find out what binds to what. One method predicts the 3D fit, folding each receptor and peptide together from sequence alone. The other spots mimics of the body’s own signals. Pairs found by both jump to the top of the list.',b(){
-T(24,26,'Co-folding','th','start');T(24,44,'204 receptors · Rubin GPUs','ts','start');const seq=T(24,62,'','ts','start');
-const ox=250,oy=124,s=.6;const mb=E('g',{opacity:0});membrane(150,350,oy-36*s,oy+36*s,mb);
+{d:23.74,t:'Aim 1: which peptides bind which receptors',n:'First, we find out what binds to what. One method predicts the 3D fit, co-folding each receptor and peptide together from sequence alone. The other, pharmacophore matching, compares each peptide with the receptor’s own natural peptide ligand, wherever that ligand is known. Pairs found by both jump to the top of the list.',b(){
+T(24,24,'Co-folding approach','th','start');const seq=T(24,42,'','ts','start');T(24,60,'204 receptors · Rubin GPUs','ts','start');
+const ox=250,oy=126,s=.6;const mb=E('g',{opacity:0});membrane(150,350,oy-36*s,oy+36*s,mb);
 const rc=gpcr(stage,{fold:0,ux:-30});place(rc,ox,oy,s);
 const lig=pep(C.pep,5,rc.mid);
-E('rect',{x:370,y:92,width:8,height:60,rx:2,fill:C.g,'fill-opacity':.15});const bar=E('rect',{x:370,y:152,width:8,height:0,rx:2,fill:C.hot});const sc=T(374,166,'','ts');
+E('rect',{x:370,y:94,width:8,height:60,rx:2,fill:C.g,'fill-opacity':.15});const bar=E('rect',{x:370,y:154,width:8,height:0,rx:2,fill:C.hot});const sc=T(374,168,'','ts');
 E('line',{x1:24,y1:198,x2:384,y2:198,style:'stroke:var(--border)','stroke-width':.5});
-T(24,220,'Motif matching','th','start');T(24,238,'83 receptors · Vera CPUs','ts','start');
-const mg=E('g',{opacity:0});const cx2=270,cy2=268,tg=[[-30,-12],[-8,14],[18,-16],[36,10]],st=[[-70,-30],[-40,40],[50,-38],[80,30]];
-T(cx2,312,'Peptide matched to the shape of a known signal','ts','middle',mg);
-const tc=tg.map(q=>E('circle',{cx:cx2+q[0],cy:cy2+q[1],r:8,fill:'none',stroke:C.rec,'stroke-width':1,'stroke-dasharray':'3 3'},mg));
-const pl=E('polyline',{fill:'none',stroke:C.pep,'stroke-width':1.5},mg);const bd=tg.map(()=>E('circle',{r:4.5,fill:C.pep},mg));
+T(24,216,'Pharmacophore matching','th','start');T(24,234,'83 receptors with a known endogenous ligand · Vera CPUs','ts','start');
+// endogenous ligand -> its pharmacophore (H-bond donor, acceptor, hydrophobic, aromatic) -> milk peptide aligned to it
+const tg=[[-30,-10],[-9,12],[12,-12],[32,10]],FT=['D','A','H','Ar'],L0=[95,276],L1=[285,276],st=[[-44,-22],[-24,26],[26,-26],[48,22]];
+const en=E('g',{opacity:0});E('polyline',{points:J(tg.map(q=>[L0[0]+q[0],L0[1]+q[1]])),fill:'none',stroke:C.endo,'stroke-width':1.5},en);tg.forEach(q=>E('circle',{cx:L0[0]+q[0],cy:L0[1]+q[1],r:4.5,fill:C.endo},en));
+const mkF=(p)=>{const g=E('g',{opacity:0},p);const cs=tg.map((q,i)=>{const c=E('circle',{cx:q[0],cy:q[1],r:9,fill:'none',stroke:C.rec,'stroke-width':1,'stroke-dasharray':'3 3'},g);const tx=T(q[0],q[1]+(q[1]<0?-16:16),FT[i],'ts','middle',g);tx.setAttribute('style','font-size:9px');return c});return{g,cs}};
+const fL=mkF(stage);fL.g.setAttribute('transform',`translate(${L0[0]},${L0[1]})`);const fR=mkF(stage);
+const ar=E('g',{opacity:0});E('line',{x1:168,y1:276,x2:204,y2:276,class:'arr','marker-end':'url(#arrow)'},ar);
+const l0=T(L0[0],316,'Natural ligand’s features','ts');const l1=T(L1[0],316,'Milk peptide fitted to them','ts');op(l0,0);op(l1,0);
+const pl=E('polyline',{fill:'none',stroke:C.pep,'stroke-width':1.5,opacity:0});const bd=tg.map(()=>E('circle',{r:4.5,fill:C.pep,opacity:0}));
 E('circle',{cx:486,cy:168,r:78,fill:C.g,'fill-opacity':.06,stroke:C.g,'stroke-width':.8});E('circle',{cx:574,cy:168,r:78,fill:C.g,'fill-opacity':.06,stroke:C.g,'stroke-width':.8});
-T(456,78,'Co-folding hits','ts');T(608,78,'Motif hits','ts');const lb=E('g',{opacity:0});T(530,270,'Found by both','th','middle',lb);T(530,290,'Top of the list for validation','ts','middle',lb);
+T(456,78,'Co-folding hits','ts');T(612,78,'Pharmacophore hits','ts');const lb=E('g',{opacity:0});T(530,270,'Found by both','th','middle',lb);T(530,290,'Top of the list for validation','ts','middle',lb);
 const r=R(5),inA=(x,y)=>(x-486)**2+(y-168)**2<70*70,inB=(x,y)=>(x-574)**2+(y-168)**2<70*70,ds=[];
 const add=(n,f,a0,a1,both)=>{let k=0;while(k<n){const x=408+r()*244,y=90+r()*156;if(f(x,y)){ds.push({e:E('circle',{cx:f1(x),cy:f1(y),r:both?4.4:2.6,fill:both?C.hot:C.g,opacity:0}),a:a0+r()*(a1-a0)});k++}}};
-add(24,(x,y)=>inA(x,y)&&!inB(x,y),7.4,13);add(18,(x,y)=>inB(x,y)&&!inA(x,y),11,14.5);add(9,(x,y)=>inA(x,y)&&inB(x,y),14.2,16.2,true);
-return t=>{seq.textContent=t>3?'Fold receptor + peptide from sequence':'';
-const f=sg(t,3.2,6.6);rc.set(f,0);op(mb,sg(t,5.4,6.6));
-const k=sg(t,5.9,7.3);op(lig,sg(t,2.9,3.4));lig.setAttribute('transform',`translate(${f1(lerp(178,rc.pocket[0],k))},${f1(lerp(-80,rc.pocket[1],k))}) rotate(${f1(80*k)})`);
-const h=60*.88*sg(t,7.2,8.6);bar.setAttribute('height',f1(h));bar.setAttribute('y',f1(152-h));sc.textContent=t>8.6?'score':'';
-op(mg,sg(t,10.1,10.7));const P=2.4,q=t>10.4?((t-10.4)%P)/P:0,kk=sg(q,.1,.5),pos=tg.map((g,i)=>[cx2+st[i][0]+(g[0]-st[i][0])*kk,cy2+st[i][1]+(g[1]-st[i][1])*kk]);
+add(24,(x,y)=>inA(x,y)&&!inB(x,y),7.8,14);add(18,(x,y)=>inB(x,y)&&!inA(x,y),14.5,19.4);add(9,(x,y)=>inA(x,y)&&inB(x,y),19.9,22,true);
+return t=>{seq.textContent=t>2.9?'Receptor and peptide together, from sequence alone':'';
+const f=sg(t,3.3,7.0);rc.set(f,0);op(mb,sg(t,5.8,7.0));
+const k=sg(t,6.3,7.7);op(lig,sg(t,2.9,3.4));lig.setAttribute('transform',`translate(${f1(lerp(178,rc.pocket[0],k))},${f1(lerp(-80,rc.pocket[1],k))}) rotate(${f1(80*k)})`);
+const h=60*.88*sg(t,7.6,9);bar.setAttribute('height',f1(h));bar.setAttribute('y',f1(154-h));sc.textContent=t>9?'score':'';
+op(en,sg(t,10.4,11.2));op(fL.g,sg(t,11.4,12.4));op(l0,sg(t,11.4,12.4));op(ar,sg(t,13,13.6));op(l1,sg(t,14,14.8));
+const m=sg(t,12.8,14.2);fR.g.setAttribute('transform',`translate(${f1(lerp(L0[0],L1[0],m))},${L1[1]})`);op(fR.g,t>12.8?1:0);
+const P=2.4,q=t>14.4?((t-14.4)%P)/P:0,kk=sg(q,.1,.5),pos=tg.map((g,i)=>[L1[0]+st[i][0]+(g[0]-st[i][0])*kk,L1[1]+st[i][1]+(g[1]-st[i][1])*kk]);
 bd.forEach((b,i)=>{b.setAttribute('cx',f1(pos[i][0]));b.setAttribute('cy',f1(pos[i][1]))});pl.setAttribute('points',J(pos));
-const o=1-sg(q,.85,1);bd.forEach(b=>op(b,o));op(pl,o*.6);tc.forEach(c=>c.setAttribute('stroke',kk>.99&&q<.85?C.hot:C.rec));
-ds.forEach(d=>op(d.e,sg(t,d.a,d.a+.4)));op(lb,sg(t,14.1,14.8))}}},
+const o=t>14.4?1-sg(q,.85,1):0;bd.forEach(b=>op(b,o));op(pl,o*.6);fR.cs.forEach(c=>c.setAttribute('stroke',kk>.99&&q<.85?C.hot:C.rec));
+ds.forEach(d=>op(d.e,sg(t,d.a,d.a+.4)));op(lb,sg(t,19.8,20.5))}}},
+
 
 {d:11.1,t:'Already validated at one receptor',n:'And it already works. On the μ-opioid receptor, our blind prediction places met-enkephalin almost exactly where the experimental structure has it.',b(){
 const im=E('g',{opacity:0});E('rect',{x:34,y:2,width:181,height:326,rx:10,fill:'#ffffff',style:'stroke:var(--border)','stroke-width':.5},im);
@@ -208,32 +221,35 @@ const rp=t>2.6?((t-2.6)%1.6)/1.6:0;op(ring,t>2.6?(1-rp)*.9:0);ring.setAttribute(
 op(tx,sg(t,1.9,2.6));big.textContent=t>3.4?'≤ '+(2.6*sg(t,3.4,4.4)+(1-sg(t,3.4,4.4))*9).toFixed(1)+' Å':'';op(sub,sg(t,4.2,4.9));
 op(gl,sg(t,6.2,6.9));dots.forEach((d,i)=>{const on=i===0?t>6.4:t>7.2+i*.012;d.setAttribute('fill',i===0&&on?C.hot:on?C.rec:C.g);d.setAttribute('fill-opacity',on?.85:.2)})}}},
 
-{d:24.72,t:'Aim 2: does it switch the receptor on or off?',n:'But binding isn’t the same as acting. β-casomorphin, from milk casein, is an agonist: it tips the receptor into its active shape, swinging helix 6 open so a G protein can couple. Casoxin binds just as tightly, but holds the receptor shut. We simulate this switch across 12 gut receptors, and train a model to predict the rest.',b(){
+{d:37.46,t:'Aim 2: does it switch the receptor on or off?',n:'But binding isn’t the same as acting. β-casomorphin, from milk casein, is an agonist at the μ-opioid receptor: it tips the receptor into its active shape, swinging helix 6 outward so a G protein can couple. The G protein swaps GDP for GTP and splits into Gα and Gβγ, which carry the signal into the cell. Casoxin binds just as tightly, but holds the receptor shut, so no signal goes out. We simulate this switch across 12 gut receptors, and train a model to predict the rest.',b(){
 E('line',{x1:340,y1:8,x2:340,y2:246,style:'stroke:var(--border)','stroke-width':.5});
 T(28,66,'Outside','ts','start');T(28,158,'Inside','ts','start');
 const s=.9,oy=112;
 const mk=(cx,ag)=>{T(cx,14,ag?'Agonist: β-casomorphin':'Antagonist: casoxin','th');
 membrane(cx-150+(ag?14:0),cx+150,oy-36*s,oy+36*s);
 const rc=gpcr(stage,{fold:0,uy:-70,ux:ag?-12:0});place(rc,cx,oy,s);const gp=gprot(rc.g);const lig=pep(ag?C.pep:C.ant,ag?7:6,rc.mid);
-const lb=T(cx-98,200,'','ts');const tm=T(cx+118,218,'','ts');
+const lb=T(cx-100,196,'','ts'),lb2=T(cx-100,212,'','ts');const tm=T(cx+82,198,'','ts','start');
+const tma=E('path',{d:`M${cx+44} ${oy+66} Q${cx+58} ${oy+78} ${cx+66} ${oy+62}`,class:'arr','marker-end':'url(#arrow)',opacity:0});
+const ea=T(cx-29,218,'Gα: ↓ cAMP','ts'),eb=T(cx+92,218,'Gβγ: K⁺ channels','ts');op(ea,0);op(eb,0);
 const cv=E('path',{fill:'none',style:'stroke:var(--text-secondary)','stroke-width':1.5,opacity:0}),ball=E('circle',{r:5.5,fill:ag?C.pep:C.ant,opacity:0});
 const l1=T(cx-60,316,'Inactive','ts'),l2=T(cx+60,316,'Active','ts');op(l1,0);op(l2,0);
-return{cx,ag,rc,gp,lig,lb,tm,cv,ball,l1,l2}};
+return{cx,ag,rc,gp,lig,lb,lb2,tm,tma,ea,eb,cv,ball,l1,l2}};
 const P=[mk(170,true),mk(510,false)];const mdl=T(340,254,'','ts');
 return t=>{const f=sg(t,.2,2.7);P.forEach(o=>{
-const t0=o.ag?3.1:13.8,k=sg(t,t0,t0+1.8);op(o.lig,sg(t,t0-.1,t0+.4));
+const t0=o.ag?3.2:24.8,k=sg(t,t0,t0+1.8);op(o.lig,sg(t,t0-.1,t0+.4));
 o.lig.setAttribute('transform',`translate(${f1(lerp(-70,o.rc.pocket[0],k))},${f1(lerp(-118,o.rc.pocket[1],k))}) rotate(${f1(82*k)})`);
-let a=0,gx=52,gy=88,on=0;
-if(o.ag){a=sg(t,5.8,8.6);const dk=sg(t,8.6,10.4);gx=lerp(52,o.rc.cavity[0],dk);gy=lerp(88,o.rc.cavity[1]+2,dk);on=sg(t,10.3,11)}
-else{a=.06*Math.sin(t*9)*sg(t,15.5,16)*(1-sg(t,17.6,18.2));const ap=sg(t,15.8,16.7)*(1-sg(t,16.9,17.8));gx=lerp(52,40,ap);gy=lerp(88,72,ap)}
-o.rc.set(f,a);o.gp.set(gx,gy,on,t);op(o.gp.g,sg(t,1.6,2.6));
-o.lb.textContent=o.ag?(t>10.6?'G protein activated':t>6?'Receptor opening':''):(t>15.6?'Bound, but held shut':'');
-o.tm.textContent=o.ag&&t>6.4?'TM6 swings out':'';op(o.tm,o.ag?sg(t,6.4,7):0);
-const show=sg(t,18.3,19);[o.cv,o.ball,o.l1,o.l2].forEach(e=>op(e,show));
-const tilt=o.ag?.5*sg(t,19,20.6):-.25*sg(t,19,20.6),bx=o.ag?-1+2*sg(t,20.3,21.9):-1-.02*Math.sin(t*7);
+let a=0,gx=52,gy=88,on=0,ex=0,sp=0;
+if(o.ag){a=sg(t,7.4,10.4);const dk=sg(t,11.2,13.2);gx=lerp(52,o.rc.cavity[0],dk);gy=lerp(88,o.rc.cavity[1]+2,dk);on=sg(t,13.1,13.8);ex=sg(t,16.2,18.2);sp=sg(t,19.2,21.2)}
+else{a=.06*Math.sin(t*9)*sg(t,26.6,27.1)*(1-sg(t,29.6,30.2));const ap=sg(t,27.2,28.1)*(1-sg(t,28.3,29.2));gx=lerp(52,40,ap);gy=lerp(88,72,ap)}
+o.rc.set(f,a);o.gp.set(gx,gy,on,t,ex,sp);op(o.gp.g,sg(t,1.6,2.6));
+if(o.ag){op(o.tm,sg(t,7.6,8.2)*(1-sg(t,18.4,19)));o.tm.textContent='TM6 swings out';op(o.tma,sg(t,7.6,8.2)*(1-sg(t,18.4,19)));op(o.ea,sg(t,21,21.8));op(o.eb,sg(t,21.3,22.1))}
+else{o.lb.textContent=t>26.7?'Bound, but held shut':'';o.lb2.textContent=t>28.6?'no G protein signal':''}
+const show=sg(t,31,31.7);[o.cv,o.ball,o.l1,o.l2].forEach(e=>op(e,show));
+const tilt=o.ag?.5*sg(t,31.7,33.3):-.25*sg(t,31.7,33.3),bx=o.ag?-1+2*sg(t,33,34.6):-1-.02*Math.sin(t*7);
 let d='';for(let i=0;i<=48;i++){const x=-1.4+2.8*i/48;d+=(i?'L':'M')+f1(o.cx+x*60)+' '+f1(288-V(x,tilt)*20)}o.cv.setAttribute('d',d);
 o.ball.setAttribute('cx',f1(o.cx+bx*60));o.ball.setAttribute('cy',f1(288-V(bx,tilt)*20-5))});
-mdl.textContent=t>18.4?'Activation MD across 12 GPCRs → efficacy model':''}}},
+mdl.textContent=t>31.1?'Activation MD across 12 GPCRs → efficacy model':''}}},
+
 
 {d:10.76,t:'The hero run: all 144 GPUs at once',n:'That’s a lot of computing. On the Huang Complex, all 144 GPUs work together, so years of work shrink to one or two weeks.',b(){
 const r=R(3),g=[];[90,390].forEach(rx=>{E('rect',{x:rx,y:50,width:200,height:200,rx:8,fill:'none',style:'stroke:var(--border-strong)','stroke-width':.8});T(rx+100,34,'NVL72 rack · 72 GPUs','ts');for(let c=0;c<8;c++)for(let w=0;w<9;w++)g.push({e:E('rect',{x:rx+14+c*21.5,y:64+w*19.1,width:17,height:14,rx:2,fill:C.g,'fill-opacity':.2}),a:.3+r()*2.6,ph:r()*6})});
@@ -246,35 +262,51 @@ ln.forEach(l=>{op(l,sg(t,1.5,2.5)*.85);l.setAttribute('stroke-dashoffset',f1(-t*
 const w1=420*sg(t,4.6,8),w2=24*sg(t,4.6,5.1);b1.setAttribute('width',f1(w1));b2.setAttribute('width',f1(w2));
 l1.setAttribute('x',f1(158+w1));op(l1,sg(t,4.6,5));op(l2,sg(t,4.8,5.2))}}},
 
-{d:25.14,t:'The payoff: a peptide–receptor map',n:'The payoff is a map. Peptides and receptors become one network, linked wherever binding is predicted, and marked as switching the receptor on or off. Grouping receptors by the peptides they share reveals families, and gives orphan receptors their first clues. That means better infant formula, new drug targets, and stronger grant proposals.',b(){
-// edges: [peptide, receptor, effect] effect 1 = switches on, -1 = switches off, 0 = binds (effect not yet modelled)
+{d:38.65,t:'The payoff: a peptide–receptor map',n:'The payoff is a map. Some gut receptors have a known natural ligand; orphan receptors have none, so we don’t know what switches them on. Our screen links peptides to receptors wherever binding is predicted, and marks whether each one switches the receptor on or off. Grouping receptors by the peptides they share places orphans beside known receptors, giving each one candidate ligands to test. The strongest candidates then go to the lab for binding and signaling assays. That means better infant formula, and new drug targets for the gut.',b(){
+// --- known vs orphan explainer ---
+const xp=E('g',{opacity:0});const ko=[210,470],oy=150,s=.62;
+ko.forEach(x=>membrane(x-95,x+95,oy-36*s,oy+36*s,xp));
+const kr=gpcr(xp);place(kr,ko[0],oy,s);const orr=gpcr(xp);place(orr,ko[1],oy,s);
+const el=pep(C.endo,5,kr.mid);el.setAttribute('transform',`translate(${kr.pocket[0]},${kr.pocket[1]}) rotate(82)`);
+T(ko[0],40,'Known receptor','th','middle',xp);T(ko[0],58,'natural (endogenous) ligand identified','ts','middle',xp);T(ko[0],222,'e.g. μ-opioid receptor ← enkephalins','ts','middle',xp);
+T(ko[1],40,'Orphan receptor','th','middle',xp);T(ko[1],58,'no known natural ligand','ts','middle',xp);T(ko[1],222,'what switches it on is unknown','ts','middle',xp);
+const qm=T(ko[1]+kr.pocket[0]*s,oy+kr.pocket[1]*s-2,'?','th',undefined,xp);qm.setAttribute('style',`font-size:26px;font-weight:600;fill:${C.hot}`);
+// --- network ---
+// edges: [peptide, receptor, effect] 1 = switches on, -1 = switches off, 0 = binds (effect not yet modelled)
 const EG=[[0,0,1],[0,1,1],[1,0,-1],[1,2,0],[2,1,1],[2,2,0],[3,3,1],[3,4,0],[4,3,-1],[4,5,0],[5,4,0],[5,5,0],[6,6,1],[6,7,0],[7,6,-1],[7,8,0],[8,7,0],[8,8,0],[9,0,1],[9,3,1],[10,2,0],[10,6,-1],[11,4,0],[11,5,0],[11,1,1],[12,7,0],[12,6,1],[13,5,0],[13,3,1]];
-const ORPH=[5,8],FAM=[0,0,0,1,1,1,2,2,2];
-const HP=[[440,106],[604,104],[520,222]],CP=[[418,96],[462,90],[440,130],[582,96],[626,92],[616,136],[498,206],[542,206],[520,246]];
-const NP=14,px=150,py=i=>58+i*14.6,rx=420,ry=j=>62+j*23.5;
-const hdr=E('g',{});T(px,32,'Milk peptides','th','middle',hdr);T(rx,32,'Gut receptors','th','middle',hdr);
-const leg=E('g',{opacity:0});[[C.pep,'switches on'],[C.ant,'switches off'],[C.g,'binds, effect not yet modelled']].forEach((q,i)=>{const x=[120,240,370][i];E('line',{x1:x,y1:300,x2:x+18,y2:300,stroke:q[0],'stroke-width':2.4},leg);T(x+23,300,q[1],'ts','start',leg)});
-E('circle',{cx:126,cy:320,r:6,fill:'none',stroke:C.rec,'stroke-dasharray':'2 2'},leg);T(143,320,'orphan receptor (no known ligand)','ts','start',leg);
-const hulls=HP.map(h=>E('circle',{cx:h[0],cy:h[1],r:46,fill:C.rec,'fill-opacity':.06,stroke:C.rec,'stroke-opacity':.5,'stroke-dasharray':'4 4','stroke-width':.8,opacity:0}));
+const ORPH=[5,8],FAM=[0,0,0,1,1,1,2,2,2],HP=[[440,106],[604,104],[500,228]],CP=[[418,96],[462,90],[440,130],[582,96],[626,92],[616,136],[478,214],[522,214],[500,250]];
+const NP=14,px=150,py=i=>58+i*14.6,rx=420,ry=j=>62+j*23.5,FOC=5,cand=new Set(EG.filter(e=>e[1]===FOC).map(e=>e[0]));
+const hdr=E('g',{opacity:0});T(px,32,'Milk peptides','th','middle',hdr);T(rx,32,'Gut receptors','th','middle',hdr);
+const leg=E('g',{opacity:0});[[C.pep,'switches on'],[C.ant,'switches off'],[C.g,'binds, effect not yet modelled']].forEach((q,i)=>{const x=[96,216,346][i];E('line',{x1:x,y1:298,x2:x+18,y2:298,stroke:q[0],'stroke-width':2.4},leg);T(x+23,298,q[1],'ts','start',leg)});
+E('circle',{cx:104,cy:318,r:3.6,fill:C.endo},leg);T(113,318,'known natural ligand','ts','start',leg);const lq=T(258,318,'?','th','middle',leg);lq.setAttribute('style',`fill:${C.hot};font-weight:600`);T(268,318,'orphan receptor','ts','start',leg);
+const hulls=HP.map(h=>E('circle',{cx:h[0],cy:h[1],r:42,fill:C.rec,'fill-opacity':.06,stroke:C.rec,'stroke-opacity':.5,'stroke-dasharray':'4 4','stroke-width':.8,opacity:0}));
 const ttl=T(520,32,'Receptors grouped by the peptides they share','th');op(ttl,0);
-// receptor-receptor projection: weight = number of shared peptides
 const nb=Array.from({length:NP},()=>[]);EG.forEach(e=>nb[e[0]].push(e[1]));const W={};nb.forEach(l=>{for(let a=0;a<l.length;a++)for(let b=a+1;b<l.length;b++){const k=Math.min(l[a],l[b])+'-'+Math.max(l[a],l[b]);W[k]=(W[k]||0)+1}});
-const PR=Object.keys(W).map(k=>{const[a,b]=k.split('-').map(Number);return{a,b,w:W[k],e:E('line',{stroke:C.rec,'stroke-opacity':.55,'stroke-width':f1(1+W[k]*1.4),opacity:0})}});
-const be=EG.map((e,i)=>({e:E('line',{x1:px+6,y1:py(e[0]),x2:px+6,y2:py(e[0]),stroke:e[2]>0?C.pep:e[2]<0?C.ant:C.g,'stroke-width':e[2]?1.8:1.2,'stroke-opacity':e[2]?.85:.55}),p:e[0],r:e[1],a:2.6+i*.26}));
+const PR=Object.keys(W).map(k=>{const[a,b]=k.split('-').map(Number);return{a,b,e:E('line',{stroke:C.rec,'stroke-opacity':.55,'stroke-width':f1(1+W[k]*1.4),opacity:0})}});
+const be=EG.map((e,i)=>({e:E('line',{x1:px+6,y1:py(e[0]),x2:px+6,y2:py(e[0]),stroke:e[2]>0?C.pep:e[2]<0?C.ant:C.g,'stroke-width':e[2]?1.8:1.2,'stroke-opacity':e[2]?.85:.55}),p:e[0],r:e[1],a:10.6+i*.26}));
 const pn=Array.from({length:NP},(_,i)=>E('circle',{cx:px,cy:f1(py(i)),r:4.5,fill:C.pep,opacity:0}));
-const rn=FAM.map((f,j)=>{const g=E('g',{opacity:0}),o=ORPH.includes(j);E('circle',{r:11,fill:o?'none':C.rec,'fill-opacity':.16,stroke:C.rec,'stroke-width':1.1,'stroke-dasharray':o?'3 3':'none',style:o?'fill:var(--bg)':''},g);
-for(let b=0;b<7;b++)E('rect',{x:-6.6+b*1.9,y:-5.5+(b%2)*1.4,width:1.3,height:9.5,rx:.6,fill:C.rec,'fill-opacity':o?.55:1},g);return{g,o,x:rx,y:ry(j)}});
-const orl=E('g',{opacity:0});const oring=E('circle',{cx:CP[5][0],cy:CP[5][1],r:15,fill:'none',stroke:C.hot,'stroke-width':1.6},orl);
-T(668,164,'Orphan receptor:','ts','end',orl);T(668,180,'gains a testable ligand hypothesis','ts','end',orl);
-const oc=E('g',{opacity:0});[['Better infant formula','function, not composition'],['New drug targets','gut, metabolic, inflammatory'],['Stronger proposals','NIH R01 and R21, USDA, industry']].forEach((q,i)=>{const x=16+i*220;E('rect',{x,y:272,width:208,height:50,rx:8,class:'box','stroke-width':.5},oc);T(x+104,289,q[0],'th','middle',oc);T(x+104,307,q[1],'ts','middle',oc)});
-return t=>{op(leg,sg(t,2.4,3)*(1-sg(t,11.4,12)));
-pn.forEach((n,i)=>op(n,sg(t,.4+i*.05,1+i*.05)*(1-.8*sg(t,11.6,12.6))));op(hdr,1-sg(t,11.4,12));
-rn.forEach((n,j)=>{const k=sg(t,11.7+j*.08,13.4+j*.08);n.x=lerp(rx,CP[j][0],k);n.y=lerp(ry(j),CP[j][1],k);n.g.setAttribute('transform',`translate(${f1(n.x)},${f1(n.y)})`);op(n.g,sg(t,.8+j*.06,1.4+j*.06))});
-be.forEach(b=>{const k=sg(t,b.a,b.a+.55),n=rn[b.r];b.e.setAttribute('x2',f1(lerp(px+6,n.x-11,k)));b.e.setAttribute('y2',f1(lerp(py(b.p),n.y,k)));op(b.e,(1-.85*sg(t,11.6,12.6)))});
-PR.forEach(p=>{const A=rn[p.a],B=rn[p.b];p.e.setAttribute('x1',f1(A.x));p.e.setAttribute('y1',f1(A.y));p.e.setAttribute('x2',f1(B.x));p.e.setAttribute('y2',f1(B.y));op(p.e,sg(t,13.3,14.6))});
-hulls.forEach((h,i)=>op(h,sg(t,14.6+i*.3,15.4+i*.3)));op(ttl,sg(t,12,12.8));
-op(orl,sg(t,16.4,17.2));const rp=t>16.4?((t-16.4)%1.4)/1.4:0;oring.setAttribute('r',f1(13+rp*9));op(oring,(1-rp)*.9);
-op(oc,sg(t,19.2,20));oc.setAttribute('transform',`translate(0,${f1(8*(1-sg(t,19.2,20)))})`)}}}
+const rn=FAM.map((f,j)=>{const g=E('g',{opacity:0}),o=ORPH.includes(j);E('circle',{r:11,fill:C.rec,'fill-opacity':o?.05:.16,stroke:C.rec,'stroke-width':1.1,'stroke-dasharray':o?'3 3':'none'},g);
+for(let b=0;b<7;b++)E('rect',{x:-6.6+b*1.9,y:-5.5+(b%2)*1.4,width:1.3,height:9.5,rx:.6,fill:C.rec,'fill-opacity':o?.5:1},g);
+let q=null,cd=null;if(o){q=T(11,-11,'?','th','middle',g);q.setAttribute('style',`font-size:13px;font-weight:600;fill:${C.hot}`);if(j===FOC)cd=E('circle',{cx:11,cy:-11,r:4,fill:C.pep,opacity:0},g)}else E('circle',{cx:9,cy:-9,r:3.4,fill:C.endo},g);
+return{g,o,q,cd,x:rx,y:ry(j)}});
+const orl=E('g',{opacity:0});const oring=E('circle',{cx:CP[FOC][0],cy:CP[FOC][1],r:15,fill:'none',stroke:C.hot,'stroke-width':1.6},orl);
+T(668,162,'Orphan placed beside known receptors:','ts','end',orl);T(668,178,'shared peptides become candidate ligands','ts','end',orl);
+const fly=[...cand].map(i=>({i,e:E('circle',{r:4.5,fill:C.pep,opacity:0})}));
+const lab=E('g',{opacity:0});E('rect',{x:16,y:272,width:206,height:50,rx:8,class:'box','stroke-width':.5,style:`stroke:${C.pep}`},lab);T(119,289,'Lab validation','th','middle',lab);T(119,307,'PDSP binding and cAMP assays','ts','middle',lab);
+const oc=E('g',{opacity:0});E('line',{x1:226,y1:297,x2:242,y2:297,class:'arr','marker-end':'url(#arrow)'},oc);
+[['Better infant formula','function, not composition'],['New gut drug targets','including orphan receptors']].forEach((q,i)=>{const x=250+i*214;E('rect',{x,y:272,width:202,height:50,rx:8,class:'box','stroke-width':.5},oc);T(x+101,289,q[0],'th','middle',oc);T(x+101,307,q[1],'ts','middle',oc)});
+return t=>{op(xp,sg(t,2.3,3.2)*(1-sg(t,9.5,10.1)));const qp=t>4.4?((t-4.4)%1.6)/1.6:0;qm.setAttribute('opacity',(t>4.4?.55+.45*Math.cos(qp*Math.PI*2):1).toFixed(2));
+op(hdr,sg(t,10,10.6)*(1-sg(t,19,19.6)));op(leg,sg(t,10.6,11.2)*(1-sg(t,19,19.6)));
+const hi=sg(t,24.6,25.4)*(1-sg(t,28,28.6));
+pn.forEach((n,i)=>op(n,sg(t,10.1+i*.05,10.7+i*.05)*(1-.8*sg(t,19.1,20.1))+(cand.has(i)?hi*.8:0)));
+rn.forEach((n,j)=>{const k=sg(t,19.2+j*.08,20.9+j*.08);n.x=lerp(rx,CP[j][0],k);n.y=lerp(ry(j),CP[j][1],k);n.g.setAttribute('transform',`translate(${f1(n.x)},${f1(n.y)})`);op(n.g,sg(t,10.2+j*.06,10.8+j*.06));
+if(n.cd){const c=sg(t,25.4,26.2);op(n.cd,c);op(n.q,1-c)}});
+be.forEach(b=>{const k=sg(t,b.a,b.a+.55),n=rn[b.r];b.e.setAttribute('x2',f1(lerp(px+6,n.x-11,k)));b.e.setAttribute('y2',f1(lerp(py(b.p),n.y,k)));op(b.e,t<b.a?0:(1-.85*sg(t,19.1,20.1))+(b.r===FOC?hi*.8:0))});
+PR.forEach(p=>{const A=rn[p.a],B=rn[p.b];p.e.setAttribute('x1',f1(A.x));p.e.setAttribute('y1',f1(A.y));p.e.setAttribute('x2',f1(B.x));p.e.setAttribute('y2',f1(B.y));op(p.e,sg(t,20.8,22.2))});
+hulls.forEach((h,i)=>op(h,sg(t,22.2+i*.3,23+i*.3)));op(ttl,sg(t,19.6,20.4));
+op(orl,sg(t,24.4,25.2));const rp=t>24.4?((t-24.4)%1.4)/1.4:0;oring.setAttribute('r',f1(13+rp*9));op(oring,(1-rp)*.9);
+op(lab,sg(t,28,28.8));fly.forEach((f,k)=>{const m=sg(t,28.4+k*.25,29.8+k*.25);f.e.setAttribute('cx',f1(lerp(px,60+k*28,m)));f.e.setAttribute('cy',f1(lerp(py(f.i),262,m)));op(f.e,t>28.4+k*.25?1-sg(t,31,31.6):0)});
+op(oc,sg(t,33.7,34.5));oc.setAttribute('transform',`translate(0,${f1(8*(1-sg(t,33.7,34.5)))})`)}}}
 ];
 
 // Narration: pre-recorded neural voice clips (audio/scene-N.mp3), played with one reusable audio element.
